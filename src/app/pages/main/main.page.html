@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <!-- This adds the "Hamburger" menu icon on the top left -->
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    
+    <ion-title>School Finder</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Search Bar Area -->
+  <ion-searchbar placeholder="Search schools..."></ion-searchbar>
+
+  <div class="ion-padding">
+    <h1>Welcome!</h1>
+    <p>This is where your school list will appear once the API is connected.</p>
+    
+    <!-- Example of a School Card -->
+    <ion-card color="light">
+      <ion-card-header>
+        <ion-card-title>Sample School Name</ion-card-title>
+        <ion-card-subtitle>Primary School - Wan Chai</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Address: 123 School Road, Hong Kong.
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
