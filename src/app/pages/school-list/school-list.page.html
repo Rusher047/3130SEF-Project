@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>School List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">School List</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="state-container" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading schools...</p>
+  </div>
+
+  <div class="state-container" *ngIf="!isLoading && errorMessage">
+    <ion-text color="danger">
+      <p>{{ errorMessage }}</p>
+    </ion-text>
+    <ion-button (click)="retry()" fill="outline">Retry</ion-button>
+  </div>
+
+  <div class="state-container" *ngIf="!isLoading && !errorMessage && schools.length === 0">
+    <p>No schools found.</p>
+  </div>
+
+  <ion-list *ngIf="!isLoading && !errorMessage && schools.length > 0">
+    <ion-item *ngFor="let school of schools">
+      <ion-label>
+        <h2>{{ getDisplayName(school) }}</h2>
+        <p *ngIf="school.district">District: {{ school.district }}</p>
+        <p *ngIf="getDisplayAddress(school)">Address: {{ getDisplayAddress(school) }}</p>
+        <p *ngIf="getDisplayLevelOrType(school)">Type: {{ getDisplayLevelOrType(school) }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
