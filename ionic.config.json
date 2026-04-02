@@ -1,0 +1,7 @@
+{
+  "name": "3130SEF-Project-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
