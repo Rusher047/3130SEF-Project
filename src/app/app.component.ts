@@ -15,7 +15,7 @@ export class AppComponent {
   ];
   public labels = [];
   constructor(
-    private alertController: AlertController, // 2. Inject AlertController
+    private alertController: AlertController, 
     private navCtrl: NavController,
   ) {}
   
@@ -32,7 +32,6 @@ export class AppComponent {
           text: 'Logout',
           cssClass: 'alert-danger',
           handler: () => {
-            // Redirect to Loader page (or Login page later)
             this.navCtrl.navigateRoot('/login');
           }
         }

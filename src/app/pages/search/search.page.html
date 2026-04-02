@@ -1,23 +1,35 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-buttons slot="start"><ion-back-button defaultHref="main"></ion-back-button></ion-buttons>
-    <ion-title>Search</ion-title>
+    <!-- This adds the "Hamburger" menu icon on the top left -->
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Find a School</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<ion-toolbar>
+  <ion-searchbar
+    placeholder="Type school name or district..."
+    (ionInput)="handleSearch($event)"
+    debounce="300"
+  >
+  </ion-searchbar>
+</ion-toolbar>
+
 <ion-content>
-  <ion-searchbar show-cancel-button="always" autofocus="true"></ion-searchbar>
-  
   <ion-list>
-    <ion-item>
+    <ion-item *ngFor="let school of filteredSchools">
       <ion-label>
-        <h2>Sample School Name</h2>
-        <p>Kowloon City</p>
+        <h2>{{ school.nameEn }}</h2>
+        <p>{{ school.addressEn }}</p>
+        <p>{{ school.district }}</p>
       </ion-label>
-      <!-- Heart Button to add to favorites -->
-      <ion-button slot="end" fill="clear" (click)="addFav()">
-        <ion-icon name="heart-outline"></ion-icon>
-      </ion-button>
+    </ion-item>
+
+    <ion-item *ngIf="filteredSchools.length === 0" lines="none">
+      <ion-label class="ion-text-center">No schools found.</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

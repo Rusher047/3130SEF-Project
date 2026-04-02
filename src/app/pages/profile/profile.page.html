@@ -1,3 +1,14 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    
+    <ion-title>My Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
   <div class="ion-padding ion-text-center">
     <ion-avatar style="margin: auto; width: 100px; height: 100px;">
@@ -15,7 +26,7 @@
 
   <ion-list>
     <ion-list-header>My Favorite Schools</ion-list-header>
-    <!-- We will loop through the favorites here -->
+
     <ion-item *ngIf="favorites.length === 0">
       <ion-label>No favorites added yet.</ion-label>
     </ion-item>
