@@ -38,5 +38,3 @@ Run this code below:
 
 ionic generate page pages/PAGE_NAME --standalone=false
 ```
-   
-testing
