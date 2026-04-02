@@ -1,0 +1,23 @@
+<ion-content>
+  <div class="ion-padding ion-text-center">
+    <ion-avatar style="margin: auto; width: 100px; height: 100px;">
+      <img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+    </ion-avatar>
+    <h2>User Name</h2>
+  </div>
+
+  <ion-list inset="true">
+    <ion-item>
+      <ion-label position="stacked">Display Name</ion-label>
+      <ion-input value="Rusher047"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>My Favorite Schools</ion-list-header>
+    <!-- We will loop through the favorites here -->
+    <ion-item *ngIf="favorites.length === 0">
+      <ion-label>No favorites added yet.</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

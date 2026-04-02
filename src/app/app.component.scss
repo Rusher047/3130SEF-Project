@@ -117,3 +117,11 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
+ion-footer {
+  ion-toolbar {
+    --background: transparent;
+    --padding-end: 16px;
+    --padding-bottom: 10px;
+  }
+}
