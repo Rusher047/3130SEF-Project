@@ -11,6 +11,10 @@ $RECYCLE.BIN/
 
 *.log
 log.txt
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 
 /.sourcemaps
@@ -22,6 +26,8 @@ log.txt
 /www
 /platforms
 /plugins
+/android
+/ios
 
 # Compiled output
 /dist
@@ -31,8 +37,6 @@ log.txt
 
 # Node
 /node_modules
-npm-debug.log
-yarn-error.log
 
 # IDEs and editors
 .idea/
@@ -55,15 +59,18 @@ yarn-error.log
 
 # Miscellaneous
 /.angular
-/.angular/cache
 .sass-cache/
 /.nx
 /.nx/cache
 /connect.lock
-/coverage
 /libpeerconnection.log
 testem.log
 /typings
+
+# Environment files
+.env
+.env.*
+!.env.example
 
 # System files
 .DS_Store

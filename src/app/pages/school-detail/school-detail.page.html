@@ -1,0 +1,133 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/school-list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ getTitle() }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="state-container" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>{{ getLoadingText() }}</p>
+  </div>
+
+  <div class="state-container" *ngIf="!isLoading && errorMessage">
+    <ion-text color="danger">
+      <p>{{ errorMessage }}</p>
+    </ion-text>
+    <ion-button fill="outline" (click)="goBack()">{{ getBackText() }}</ion-button>
+  </div>
+
+  <ng-container *ngIf="!isLoading && !errorMessage && school">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ getDisplayName() }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p *ngIf="hasValue(getDisplayAddress())">{{ getDisplayAddress() }}</p>
+        <ion-button expand="block" fill="outline" (click)="toggleFavorite()">{{ getFavoriteButtonText() }}</ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ language === 'zh' ? '基本資料' : 'Basic Information' }}</ion-card-title>
+      </ion-card-header>
+      <ion-list>
+        <ion-item *ngIf="language === 'en' && hasValue(school.englishName)">
+          <ion-label><h3>English Name</h3><p>{{ school.englishName }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.chineseName)">
+          <ion-label><h3>中文名稱</h3><p>{{ school.chineseName }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'en' && hasValue(school.districtEn)">
+          <ion-label><h3>District</h3><p>{{ school.districtEn }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.districtZh)">
+          <ion-label><h3>分區</h3><p>{{ school.districtZh }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'en' && hasValue(school.englishAddress)">
+          <ion-label><h3>Address</h3><p>{{ school.englishAddress }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.chineseAddress)">
+          <ion-label><h3>地址</h3><p>{{ school.chineseAddress }}</p></ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ language === 'zh' ? '聯絡資料' : 'Contact Information' }}</ion-card-title>
+      </ion-card-header>
+      <ion-list>
+        <ion-item *ngIf="language === 'en' && hasValue(school.telephoneEn)">
+          <ion-label><h3>Telephone</h3><p>{{ school.telephoneEn }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.telephoneZh)">
+          <ion-label><h3>聯絡電話</h3><p>{{ school.telephoneZh }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'en' && hasValue(school.faxNumberEn)">
+          <ion-label><h3>Fax Number</h3><p>{{ school.faxNumberEn }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.faxNumberZh)">
+          <ion-label><h3>傳真號碼</h3><p>{{ school.faxNumberZh }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'en' && hasValue(school.websiteEn)">
+          <ion-label><h3>Website</h3><p>{{ school.websiteEn }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.websiteZh)">
+          <ion-label><h3>網頁</h3><p>{{ school.websiteZh }}</p></ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-card-content *ngIf="hasWebsite()">
+        <ion-button expand="block" fill="outline" (click)="openWebsite()">{{ getOpenWebsiteText() }}</ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ language === 'zh' ? '其他資料' : 'Additional Information' }}</ion-card-title>
+      </ion-card-header>
+      <ion-list>
+        <ion-item *ngIf="language === 'en' && hasValue(school.schoolLevelEn)">
+          <ion-label><h3>School Level</h3><p>{{ school.schoolLevelEn }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.schoolTypeZh)">
+          <ion-label><h3>學校類型</h3><p>{{ school.schoolTypeZh }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'en' && hasValue(school.englishCategory)">
+          <ion-label><h3>English Category</h3><p>{{ school.englishCategory }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.chineseCategory)">
+          <ion-label><h3>中文類別</h3><p>{{ school.chineseCategory }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'en' && hasValue(school.financeTypeEn)">
+          <ion-label><h3>Finance Type</h3><p>{{ school.financeTypeEn }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.financeTypeZh)">
+          <ion-label><h3>資助種類</h3><p>{{ school.financeTypeZh }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'en' && hasValue(school.studentsGenderEn)">
+          <ion-label><h3>Students Gender</h3><p>{{ school.studentsGenderEn }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.studentsGenderZh)">
+          <ion-label><h3>就讀學生性別</h3><p>{{ school.studentsGenderZh }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'en' && hasValue(school.sessionEn)">
+          <ion-label><h3>Session</h3><p>{{ school.sessionEn }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.sessionZh)">
+          <ion-label><h3>學校授課時間</h3><p>{{ school.sessionZh }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'en' && hasValue(school.religionEn)">
+          <ion-label><h3>Religion</h3><p>{{ school.religionEn }}</p></ion-label>
+        </ion-item>
+        <ion-item *ngIf="language === 'zh' && hasValue(school.religionZh)">
+          <ion-label><h3>宗教</h3><p>{{ school.religionZh }}</p></ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+  </ng-container>
+</ion-content>

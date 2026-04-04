@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, timeout } from 'rxjs';
 
 import { School } from '../models/school.model';
 
@@ -15,6 +15,7 @@ export class SchoolService {
 
   getSchools(): Observable<School[]> {
     return this.http.get<unknown>(this.datasetUrl).pipe(
+      timeout(15000),
       map((response) => this.extractRawSchools(response)),
       map((items) => items.map((item, index) => this.mapSchool(item, index)))
     );
@@ -44,27 +45,95 @@ export class SchoolService {
   }
 
   private mapSchool(raw: Record<string, unknown>, index: number): School {
-    const id = this.pickString(raw, ['id', 'ID', 'SCH_ID', 'SCHOOL_ID']) || `school-${index}`;
+    const schoolNo = this.pickString(raw, ['SCHOOL NO.']) || `school-${index}`;
+
+    const englishCategory = this.pickString(raw, ['ENGLISH CATEGORY']);
+    const englishName = this.pickString(raw, ['ENGLISH NAME']);
+    const englishAddress = this.pickString(raw, ['ENGLISH ADDRESS']);
+    const longitudeEn = this.pickNumber(raw, ['LONGITUDE']);
+    const latitudeEn = this.pickNumber(raw, ['LATITUDE']);
+    const eastingEn = this.pickNumber(raw, ['EASTING']);
+    const northingEn = this.pickNumber(raw, ['NORTHING']);
+    const studentsGenderEn = this.pickString(raw, ['STUDENTS GENDER']);
+    const sessionEn = this.pickString(raw, ['SESSION']);
+    const districtEn = this.pickString(raw, ['DISTRICT']);
+    const financeTypeEn = this.pickString(raw, ['FINANCE TYPE']);
+    const schoolLevelEn = this.pickString(raw, ['SCHOOL LEVEL']);
+    const telephoneEn = this.pickString(raw, ['TELEPHONE']);
+    const faxNumberEn = this.pickString(raw, ['FAX NUMBER']);
+    const websiteEn = this.pickString(raw, ['WEBSITE']);
+    const religionEn = this.pickString(raw, ['RELIGION']);
+
+    const chineseCategory = this.pickString(raw, ['中文類別']);
+    const chineseName = this.pickString(raw, ['中文名稱']);
+    const chineseAddress = this.pickString(raw, ['中文地址']);
+    const longitudeZh = this.pickNumber(raw, ['經度']);
+    const latitudeZh = this.pickNumber(raw, ['緯度']);
+    const eastingZh = this.pickNumber(raw, ['坐標東']);
+    const northingZh = this.pickNumber(raw, ['坐標北']);
+    const studentsGenderZh = this.pickString(raw, ['就讀學生性別']);
+    const sessionZh = this.pickString(raw, ['學校授課時間']);
+    const districtZh = this.pickString(raw, ['分區']);
+    const financeTypeZh = this.pickString(raw, ['資助種類']);
+    const schoolTypeZh = this.pickString(raw, ['學校類型']);
+    const telephoneZh = this.pickString(raw, ['聯絡電話']);
+    const faxNumberZh = this.pickString(raw, ['傳真號碼']);
+    const websiteZh = this.pickString(raw, ['網頁']);
+    const religionZh = this.pickString(raw, ['宗教']);
 
     return {
-      id,
-      nameEn: this.pickString(raw, ['ENGLISH NAME', 'NAME_EN', 'SCH_NAMEE', 'SCH_NAME_ENG', 'SCHNAME_E', 'NAMEE']),
-      nameZh: this.pickString(raw, ['中文名稱', 'NAME_TC', 'NAME_ZH', 'SCH_NAMET', 'SCH_NAME_CHI', 'SCHNAME_C', 'NAMET']),
-      district: this.pickString(raw, ['DISTRICT', 'DISTRICT_EN', 'DISTRICT_TC', 'DISTRICT_NAME']),
-      addressEn: this.pickString(raw, ['ADDRESS_EN', 'ADDR_EN', 'SCH_ADDR_E', 'ADDRESSE']),
-      addressZh: this.pickString(raw, ['ADDRESS_TC', 'ADDRESS_ZH', 'ADDR_TC', 'SCH_ADDR_C', 'ADDRESST']),
-      telephone: this.pickString(raw, ['TEL', 'TELNO', 'PHONE', 'SCH_TEL']),
-      fax: this.pickString(raw, ['FAX', 'FAXNO', 'SCH_FAX']),
+      schoolNo,
+      englishCategory,
+      chineseCategory,
+      englishName,
+      chineseName,
+      englishAddress,
+      chineseAddress,
+      longitudeEn,
+      latitudeEn,
+      eastingEn,
+      northingEn,
+      studentsGenderEn,
+      sessionEn,
+      districtEn,
+      financeTypeEn,
+      schoolLevelEn,
+      telephoneEn,
+      faxNumberEn,
+      websiteEn,
+      religionEn,
+      longitudeZh,
+      latitudeZh,
+      eastingZh,
+      northingZh,
+      studentsGenderZh,
+      sessionZh,
+      districtZh,
+      financeTypeZh,
+      schoolTypeZh,
+      telephoneZh,
+      faxNumberZh,
+      websiteZh,
+      religionZh,
+
+      id: schoolNo,
+      nameEn: englishName,
+      nameZh: chineseName,
+      district: districtEn,
+      addressEn: englishAddress,
+      addressZh: chineseAddress,
+      telephone: telephoneEn,
+      fax: faxNumberEn,
       email: this.pickString(raw, ['EMAIL', 'SCH_EMAIL']),
-      website: this.pickString(raw, ['WEBSITE', 'WEB', 'HOMEPAGE', 'SCH_WEB']),
-      schoolLevel: this.pickString(raw, ['SCHOOL_LEVEL', 'LEVEL', 'SCH_LEVEL']),
-      schoolType: this.pickString(raw, ['SCHOOL_TYPE', 'TYPE', 'SCH_TYPE']),
-      financeType: this.pickString(raw, ['FINANCE_TYPE', 'FIN_TYPE', 'SCH_FIN_TYPE']),
-      gender: this.pickString(raw, ['GENDER', 'SEX', 'STUDENT_GENDER']),
-      session: this.pickString(raw, ['SESSION', 'SCH_SESSION']),
-      religion: this.pickString(raw, ['RELIGION', 'SCH_RELIGION']),
-      latitude: this.pickNumber(raw, ['LATITUDE', 'LAT', 'Y']),
-      longitude: this.pickNumber(raw, ['LONGITUDE', 'LNG', 'LONG', 'X']),
+      website: websiteEn,
+      schoolLevel: schoolLevelEn,
+      schoolType: englishCategory,
+      financeType: financeTypeEn,
+      gender: studentsGenderEn,
+      session: sessionEn,
+      religion: religionEn,
+      latitude: latitudeEn,
+      longitude: longitudeEn,
     };
   }
 

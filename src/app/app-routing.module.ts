@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'loader',
+    redirectTo: 'school-list',
     pathMatch: 'full'
   },
   {
@@ -18,6 +18,22 @@ const routes: Routes = [
   {
     path: 'school-list',
     loadChildren: () => import('./pages/school-list/school-list.module').then( m => m.SchoolListPageModule)
+  },
+  {
+    path: 'school-detail/:id',
+    loadChildren: () => import('./pages/school-detail/school-detail.module').then( m => m.SchoolDetailPageModule)
+  },
+  {
+    path: 'about',
+    loadChildren: () => import('./pages/about/about.module').then( m => m.AboutPageModule)
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
+  },
+  {
+    path: 'favorites',
+    loadChildren: () => import('./pages/favorites/favorites.module').then( m => m.FavoritesPageModule)
   }
 ];
 
