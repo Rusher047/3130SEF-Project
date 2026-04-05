@@ -3,27 +3,55 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    
+
     <ion-title>School Finder</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <!-- Search Bar Area -->
-<ion-searchbar placeholder="Click to search schools..." (click)="goToSearch()"></ion-searchbar>
+  <ion-card color="light" class="ion-margin">
+    <ion-card-header>
+      <ion-card-title>Find Your School</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Discover, compare, and choose from the best schools near you</p>
+    </ion-card-content>
+    <ion-searchbar
+      placeholder="Click to search schools..."
+      (click)="goToSearch()"
+    ></ion-searchbar>
+  </ion-card>
 
-  <div class="ion-padding">
-    <h1>Welcome!</h1>
-    <p>Home Page</p>
-    
-    <!-- Placeholder content for the main page -->
-    <ion-card color="light">
-      <ion-card-header>
-        <ion-card-title>Dashboard</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        .............................
-      </ion-card-content>
-    </ion-card>
+  <ion-card color="light">
+    <ion-grid class="stats-grid">
+      <ion-row>
+        <ion-col *ngFor="let s of stats" size="4" class="ion-text-center">
+          <div class="stat-box">
+            <ion-icon [name]="s.icon" [color]="s.color"></ion-icon>
+            <h3>{{ s.value }}</h3>
+            <p>{{ s.label }}</p>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <div class="section-header ion-padding">
+    <h2>Popular Districts</h2>
+    <p>Explore schools by location</p>
   </div>
+  <ion-grid class="district-grid">
+    <ion-row>
+      <ion-col *ngFor="let d of districts" size="6" size-md="4">
+        <ion-card class="district-card" (click)="browseDistrict(d.name)">
+          <div class="card-content">
+            <ion-icon [name]="d.icon"></ion-icon>
+            <h3>{{ d.name }}</h3>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
 </ion-content>
