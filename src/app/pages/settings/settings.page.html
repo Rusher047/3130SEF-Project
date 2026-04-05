@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Setting</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Setting</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Language</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-segment [value]="language" (ionChange)="onLanguageChange($any($event.detail.value))">
+        <ion-segment-button value="en">
+          <ion-label>English</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="zh">
+          <ion-label>中文</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

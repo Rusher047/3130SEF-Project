@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ getTitle() }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ getTitle() }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="state-container" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>{{ getLoadingText() }}</p>
+  </div>
+
+  <div class="state-container" *ngIf="!isLoading && errorMessage">
+    <ion-text color="danger">
+      <p>{{ errorMessage }}</p>
+    </ion-text>
+    <ion-button (click)="retry()" fill="outline">{{ getRetryText() }}</ion-button>
+  </div>
+
+  <div class="state-container" *ngIf="!isLoading && !errorMessage && favoriteSchools.length === 0">
+    <p>{{ getEmptyText() }}</p>
+  </div>
+
+  <ion-list *ngIf="!isLoading && !errorMessage && favoriteSchools.length > 0">
+    <ion-item *ngFor="let school of favoriteSchools" button detail="true" (click)="openSchoolDetail(school)">
+      <ion-label>
+        <h2>{{ getDisplayName(school) }}</h2>
+        <p *ngIf="getDisplayDistrict(school)">{{ getDistrictLabel() }}: {{ getDisplayDistrict(school) }}</p>
+        <p *ngIf="getDisplayAddress(school)">{{ getAddressLabel() }}: {{ getDisplayAddress(school) }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

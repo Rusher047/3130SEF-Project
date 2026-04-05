@@ -1,35 +1,71 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <!-- This adds the "Hamburger" menu icon on the top left -->
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-
-    <ion-title>Find a School</ion-title>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ getTitle() }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-toolbar>
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ getTitle() }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="state-container" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>{{ getLoadingText() }}</p>
+  </div>
+
+  <div class="state-container" *ngIf="!isLoading && errorMessage">
+    <ion-text color="danger">
+      <p>{{ errorMessage }}</p>
+    </ion-text>
+    <ion-button (click)="retry()" fill="outline">{{ getRetryText() }}</ion-button>
+  </div>
+
+  <div class="state-container" *ngIf="!isLoading && !errorMessage && schools.length === 0">
+    <p>{{ getEmptyText() }}</p>
+  </div>
+
   <ion-searchbar
-    placeholder="Type school name or district..."
-    (ionInput)="handleSearch($event)"
-    debounce="300"
-  >
-  </ion-searchbar>
-</ion-toolbar>
+    *ngIf="!isLoading && !errorMessage && schools.length > 0"
+    [value]="searchText"
+    (ionInput)="onSearchInput($event)"
+    [placeholder]="language === 'zh' ? '按學校名稱搜尋' : 'Search by school name'"
+  ></ion-searchbar>
 
-<ion-content>
-  <ion-list>
-    <ion-item *ngFor="let school of filteredSchools">
+  <ion-item *ngIf="!isLoading && !errorMessage && schools.length > 0">
+    <ion-label>{{ getDistrictFilterLabel() }}</ion-label>
+    <ion-select [value]="selectedDistrictKey" (ionChange)="onDistrictChange($event)">
+      <ion-select-option value="__all__">{{ getAllDistrictsText() }}</ion-select-option>
+      <ion-select-option *ngFor="let district of districtOptions" [value]="district.key">
+        {{ getDistrictOptionText(district) }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item *ngIf="!isLoading && !errorMessage && schools.length > 0">
+    <ion-label>{{ getLevelFilterLabel() }}</ion-label>
+    <ion-select [value]="selectedLevelKey" (ionChange)="onLevelChange($event)">
+      <ion-select-option value="__all__">{{ getAllLevelsText() }}</ion-select-option>
+      <ion-select-option *ngFor="let level of levelOptions" [value]="level.key">
+        {{ getLevelOptionText(level) }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <div class="state-container" *ngIf="!isLoading && !errorMessage && schools.length > 0 && filteredSchools.length === 0">
+    <p>{{ getNoSearchResultText() }}</p>
+  </div>
+
+  <ion-list *ngIf="!isLoading && !errorMessage && filteredSchools.length > 0">
+    <ion-item *ngFor="let school of filteredSchools" button detail="true" (click)="openSchoolDetail(school)">
       <ion-label>
-        <h2>{{ school.nameEn }}</h2>
-        <p>{{ school.addressEn }}</p>
-        <p>{{ school.district }}</p>
+        <h2>{{ getDisplayName(school) }}</h2>
+        <p *ngIf="getDisplayDistrict(school)">{{ getDistrictLabel() }}: {{ getDisplayDistrict(school) }}</p>
+        <p *ngIf="getDisplayAddress(school)">{{ getAddressLabel() }}: {{ getDisplayAddress(school) }}</p>
+        <p *ngIf="getDisplayLevelOrType(school)">{{ getTypeLabel() }}: {{ getDisplayLevelOrType(school) }}</p>
       </ion-label>
-    </ion-item>
-
-    <ion-item *ngIf="filteredSchools.length === 0" lines="none">
-      <ion-label class="ion-text-center">No schools found.</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

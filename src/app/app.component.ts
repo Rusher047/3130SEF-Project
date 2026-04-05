@@ -12,12 +12,17 @@ export class AppComponent {
     { title: 'Search Schools', url: '/search', icon: 'search' },
     { title: 'School Rankings', url: '/ranking', icon: 'trophy' },
     { title: 'My Profile', url: '/profile', icon: 'person' },
+    { title: 'Favorites', url: '/favorites', icon: 'heart' },
+    { title: 'Setting', url: '/settings', icon: 'settings' },
+    { title: 'About', url: '/about', icon: 'information-circle' },
   ];
   public labels = [];
+  
   constructor(
     private alertController: AlertController, 
     private navCtrl: NavController,
   ) {}
+  
   
   async logout() {
     const alert = await this.alertController.create({

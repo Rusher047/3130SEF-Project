@@ -15,6 +15,6 @@ export class ProfilePage implements OnInit {
 
   ngOnInit() {
 
-    this.favorites = this.schoolService.getFavorites();
+    // this.favorites = this.schoolService.getFavorites();
   }
 }
