@@ -21,4 +21,12 @@ export class SettingsPage implements OnInit {
     this.language = language;
     this.languageService.setLanguage(language);
   }
+
+  getSettingTitle(): string {
+    return this.language === 'zh' ? '設定' : 'Settings';
+  }
+
+  getLanguageTitle(): string {
+    return this.language === 'zh' ? '語言' : ' Language';
+  }
 }

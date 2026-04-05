@@ -24,10 +24,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/search/search.module').then( m => m.SearchPageModule)
   },
   {
-    path: 'ranking',
-    loadChildren: () => import('./pages/ranking/ranking.module').then( m => m.RankingPageModule)
-  },
-  {
     path: 'profile',
     loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule)
   },
@@ -46,7 +42,17 @@ const routes: Routes = [
   {
     path: 'favorites',
     loadChildren: () => import('./pages/favorites/favorites.module').then( m => m.FavoritesPageModule)
-  }
+  },
+  {
+  path: 'district-schools/:name', 
+  loadChildren: () => import('./pages/district-schools/district-schools.module').then( m => m.DistrictSchoolsPageModule)
+  },
+  {
+    path: 'map',
+    loadChildren: () => import('./pages/map/map.module').then( m => m.MapPageModule)
+  },
+
+
 ];
 
 @NgModule({

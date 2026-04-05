@@ -1,10 +1,10 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+  <ion-toolbar color="default">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>School Finder</ion-title>
+    <ion-title>{{ getTitle() }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,15 +12,13 @@
   <!-- Search Bar Area -->
   <ion-card color="light" class="ion-margin">
     <ion-card-header>
-      <ion-card-title>Find Your School</ion-card-title>
+      <ion-card-title>{{ getHeroTitle() }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>Discover, compare, and choose from the best schools near you</p>
+      <p>{{ getHeroSubtitle() }}</p>
     </ion-card-content>
     <ion-searchbar
-      placeholder="Click to search schools..."
-      (click)="goToSearch()"
-    ></ion-searchbar>
+      (click)="goToSearch()" placeholder="{{ getStartSearchText() }}"></ion-searchbar>
   </ion-card>
 
   <ion-card color="light">
@@ -30,7 +28,7 @@
           <div class="stat-box">
             <ion-icon [name]="s.icon" [color]="s.color"></ion-icon>
             <h3>{{ s.value }}</h3>
-            <p>{{ s.label }}</p>
+            <p>{{ getStatLabel(s) }}</p>
           </div>
         </ion-col>
       </ion-row>
@@ -38,18 +36,24 @@
   </ion-card>
 
   <div class="section-header ion-padding">
-    <h2>Popular Districts</h2>
-    <p>Explore schools by location</p>
+    <h2>{{ getPopularDistrictsTitle() }}</h2>
+    <p>{{ getExploreSubtitle() }}</p>
   </div>
   <ion-grid class="district-grid">
     <ion-row>
       <ion-col *ngFor="let d of districts" size="6" size-md="4">
-        <ion-card class="district-card" (click)="browseDistrict(d.name)">
-          <div class="card-content">
-            <ion-icon [name]="d.icon"></ion-icon>
-            <h3>{{ d.name }}</h3>
-          </div>
-        </ion-card>
+
+        <div class="district-card" 
+           [style.background-image]="'url(' + d.image + ')'"
+           (click)="browseDistrict(d)">
+        
+        <div class="card-overlay">
+          <ion-icon [name]="d.icon"></ion-icon>
+          <h3>{{ getDistrictDisplayName(d) }}</h3>
+        </div>
+        
+      </div>
+
       </ion-col>
     </ion-row>
   </ion-grid>

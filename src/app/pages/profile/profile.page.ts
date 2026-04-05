@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SchoolService } from '../../services/school.service'; // Make sure this path is correct
+import { SchoolService } from '../../services/school.service'; 
 
 @Component({
   selector: 'app-profile',

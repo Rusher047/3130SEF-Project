@@ -1,0 +1,14 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="default">
+    <ion-buttons slot="start"><ion-menu-button></ion-menu-button></ion-buttons>
+    <ion-title>{{ getPageTitle() }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scroll-y="false">
+  <div id="mapId" style="height: 100%; width: 100%;"></div>
+
+  <div class="map-floating-info">
+    <ion-badge color="secondary">{{ getBadgeText() }}</ion-badge>
+  </div>
+</ion-content>

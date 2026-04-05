@@ -197,20 +197,24 @@ export class SearchPage implements OnInit, OnDestroy {
     });
   }
 
-  private applyFilters(): void {
-    const keyword = this.searchText.trim().toLowerCase();
-    this.filteredSchools = this.schools.filter((school) => {
-      const englishName = (school.englishName || '').toLowerCase();
-      const chineseName = (school.chineseName || '').toLowerCase();
-      const matchedKeyword = !keyword || englishName.includes(keyword) || chineseName.includes(keyword);
-      const districtKey = this.getDistrictKey(school);
-      const matchedDistrict = this.selectedDistrictKey === '__all__' || districtKey === this.selectedDistrictKey;
-      const levelKey = this.getSchoolLevelKey(school);
-      const matchedLevel = this.selectedLevelKey === '__all__' || levelKey === this.selectedLevelKey;
+  applyFilters(): void {
+  const keyword = this.searchText.trim().toUpperCase(); 
+  
+  this.filteredSchools = this.schools.filter((school) => {
 
-      return matchedKeyword && matchedDistrict && matchedLevel;
-    });
-  }
+    const nameMatch = !keyword || 
+                      school.nameEn.toUpperCase().includes(keyword) || 
+                      school.nameZh.toUpperCase().includes(keyword);
+    
+    const districtMatch = this.selectedDistrictKey === '__all__' || 
+                          school.district.toUpperCase() === this.selectedDistrictKey.toUpperCase();
+    
+    const levelMatch = this.selectedLevelKey === '__all__' || 
+                       school.schoolLevel.toUpperCase() === this.selectedLevelKey.toUpperCase();
+
+    return nameMatch && districtMatch && levelMatch;
+  });
+}
 
   private buildDistrictOptions(schools: School[]): DistrictOption[] {
     const options = new Map<string, DistrictOption>();

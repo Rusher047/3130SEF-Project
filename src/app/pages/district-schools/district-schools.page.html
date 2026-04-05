@@ -1,0 +1,39 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="default">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="main"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ getDistrictTitle() }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="header-section ion-padding">
+    <h1>{{ getDisplayDistrictName() }}</h1>
+    <p class="popular-text">{{ getDisplayDescription() }}</p>
+    <ion-badge color="light">{{ getSchoolsFoundText() }}</ion-badge>
+  </div>
+
+
+  <div *ngIf="isLoading" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>{{ getLoadingText() }}</p>
+  </div>
+
+
+  <ion-list *ngIf="!isLoading">
+    <ion-item-group>
+      <ion-item-divider sticky="true">
+        <ion-label>{{ getSchoolInfoTitle() }}</ion-label>
+      </ion-item-divider>
+
+      <ion-item *ngFor="let s of schools" (click)="gotoDetail(s)" button detail="true">
+        <ion-label>
+          <h2 class="school-name">{{ getDisplayName(s) }}</h2>
+          <p>{{ getDisplayLevel(s) }} | {{ getDisplayAddress(s) }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+</ion-content>

@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { RankingPageRoutingModule } from './ranking-routing.module';
+import { MapPageRoutingModule } from './map-routing.module';
 
-import { RankingPage } from './ranking.page';
+import { MapPage } from './map.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RankingPageRoutingModule
+    MapPageRoutingModule
   ],
-  declarations: [RankingPage]
+  declarations: [MapPage]
 })
-export class RankingPageModule {}
+export class MapPageModule {}

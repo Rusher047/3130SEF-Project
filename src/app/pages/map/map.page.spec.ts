@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RankingPage } from './ranking.page';
+import { MapPage } from './map.page';
 
-describe('RankingPage', () => {
-  let component: RankingPage;
-  let fixture: ComponentFixture<RankingPage>;
+describe('MapPage', () => {
+  let component: MapPage;
+  let fixture: ComponentFixture<MapPage>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RankingPage);
+    fixture = TestBed.createComponent(MapPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

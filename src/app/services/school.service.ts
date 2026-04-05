@@ -4,21 +4,6 @@ import { Observable, map, timeout } from 'rxjs';
 
 import { School } from '../models/school.model';
 
-// export interface School {
-//   id: string;
-//   nameEn: string;
-//   nameZh: string;
-//   district: string;
-//   addressEn: string;
-//   addressZh: string;
-//   telephone: string;
-//   website: string;
-//   schoolLevel: string;
-//   latitude: number | null;
-//   longitude: number | null;
-//   // Add any other fields you need
-// }
-
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +11,6 @@ import { School } from '../models/school.model';
 export class SchoolService {
   private readonly datasetUrl = 'https://www.edb.gov.hk/attachment/en/student-parents/sch-info/sch-search/sch-location-info/SCH_LOC_EDB.json';
   
-  // private favorites: School[] = [];
 
   constructor(private readonly http: HttpClient) {}
 
@@ -39,21 +23,6 @@ export class SchoolService {
     );
   }
 
-  /* getFavorites() {
-    return this.favorites;
-  }
-
-  addToFavorites(school: School) {
-    if (!this.favorites.find(s => s.id === school.id)) {
-      this.favorites.push(school);
-    }
-  } 
-
-  removeFromFavorites(school: School) {
-    this.favorites = this.favorites.filter(s => s.id !== school.id);
-  }
-
-  */
 
   private extractRawSchools(response: unknown): Record<string, unknown>[] {
     if (Array.isArray(response)) return response.filter((item) => this.isRecord(item));
@@ -181,3 +150,5 @@ export class SchoolService {
     return value !== null && typeof value === 'object' && !Array.isArray(value);
   }
 }
+
+export { School };

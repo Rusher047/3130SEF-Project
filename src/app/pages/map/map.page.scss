@@ -1,0 +1,20 @@
+#mapId {
+  z-index: 1;
+}
+
+.map-floating-info {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 1000;
+  pointer-events: none; 
+}
+
+::ng-deep .leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  padding: 5px;
+}
+
+::ng-deep .leaflet-popup-tip {
+  display: none; 
+}
