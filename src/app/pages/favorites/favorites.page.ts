@@ -1,61 +1,61 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-
 import { School } from '../../models/school.model';
 import { FavoritesService } from '../../services/favorites.service';
-import { AppLanguage, LanguageService } from '../../services/language.service';
-import { SchoolService } from '../../services/school.service';
+import { LanguageService, AppLanguage } from '../../services/language.service';
 
 @Component({
   selector: 'app-favorites',
   templateUrl: './favorites.page.html',
   styleUrls: ['./favorites.page.scss'],
-  standalone: false,
+  standalone: false
 })
-export class FavoritesPage implements OnInit, OnDestroy {
+export class FavoritesPage implements OnInit {
+  // These variables match your HTML exactly
   favoriteSchools: School[] = [];
-  isLoading = true;
+  isLoading = false;
   errorMessage = '';
   language: AppLanguage = 'en';
 
-  private readonly destroy$ = new Subject<void>();
-
   constructor(
-    private readonly schoolService: SchoolService,
-    private readonly favoritesService: FavoritesService,
-    private readonly languageService: LanguageService,
-    private readonly router: Router
+    private favoritesService: FavoritesService,
+    private languageService: LanguageService,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.language = this.languageService.currentLanguage;
-    this.languageService.language$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((language) => (this.language = language));
-
-    this.loadFavoriteSchools();
+    this.loadData();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  ionViewWillEnter() {
+    this.language = this.languageService.currentLanguage;
+    this.loadData();
   }
 
-  ionViewWillEnter(): void {
-    this.loadFavoriteSchools();
+  loadData() {
+    this.isLoading = true;
+    try {
+      this.favoriteSchools = this.favoritesService.getFavorites();
+      this.isLoading = false;
+    } catch (e) {
+      this.errorMessage = this.language === 'zh' ? '發生錯誤' : 'An error occurred';
+      this.isLoading = false;
+    }
   }
 
-  retry(): void {
-    this.loadFavoriteSchools();
+  retry() {
+    this.loadData();
   }
+
+  // --- HTML GETTERS (Fixes all Property Not Found Errors) ---
 
   getTitle(): string {
-    return this.language === 'zh' ? '我的收藏' : 'Favorites';
+    return this.language === 'zh' ? '我的最愛' : 'My Favorites';
   }
 
   getLoadingText(): string {
-    return this.language === 'zh' ? '載入收藏學校中...' : 'Loading favorite schools...';
+    return this.language === 'zh' ? '載入中...' : 'Loading...';
   }
 
   getRetryText(): string {
@@ -63,63 +63,38 @@ export class FavoritesPage implements OnInit, OnDestroy {
   }
 
   getEmptyText(): string {
-    return this.language === 'zh' ? '暫時沒有收藏學校。' : 'No favorite schools yet.';
-  }
-
-  getDisplayName(school: School): string {
-    if (this.language === 'zh') {
-      return school.chineseName || school.englishName || '未知學校';
-    }
-
-    return school.englishName || school.chineseName || 'Unknown School';
+    return this.language === 'zh' ? '尚未添加最愛學校' : 'No favorite schools added yet.';
   }
 
   getDistrictLabel(): string {
-    return this.language === 'zh' ? '分區' : 'District';
-  }
-
-  getDisplayDistrict(school: School): string {
-    return this.language === 'zh' ? school.districtZh || school.districtEn : school.districtEn || school.districtZh;
+    return this.language === 'zh' ? '地區' : 'District';
   }
 
   getAddressLabel(): string {
     return this.language === 'zh' ? '地址' : 'Address';
   }
 
+  getDisplayDistrict(school: School): string {
+    return this.language === 'zh' ? school.districtZh : school.districtEn;
+  }
+
   getDisplayAddress(school: School): string {
-    return this.language === 'zh'
-      ? school.chineseAddress || school.englishAddress
-      : school.englishAddress || school.chineseAddress;
+    return this.language === 'zh' ? school.chineseAddress : school.englishAddress;
   }
 
-  openSchoolDetail(school: School): void {
-    this.router.navigate(['/school-detail', school.id], {
-      state: { school },
-    });
+  getDisplayName(school: School): string {
+    return this.language === 'zh' ? school.chineseName : school.englishName;
   }
 
-  private loadFavoriteSchools(): void {
-    this.isLoading = true;
-    this.errorMessage = '';
+  // --- ACTIONS ---
 
-    const favoriteIds = new Set(this.favoritesService.getFavoriteIds());
-    if (favoriteIds.size === 0) {
-      this.favoriteSchools = [];
-      this.isLoading = false;
-      return;
-    }
+  openSchoolDetail(school: School) {
+    this.router.navigate(['/school-detail', school.id]);
+  }
 
-    this.schoolService.getSchools().subscribe({
-      next: (schools) => {
-        this.favoriteSchools = schools.filter((school) => school.id && favoriteIds.has(school.id));
-        this.isLoading = false;
-      },
-      error: () => {
-        this.favoriteSchools = [];
-        this.errorMessage =
-          this.language === 'zh' ? '未能載入收藏學校，請稍後再試。' : 'Failed to load favorite schools. Please try again.';
-        this.isLoading = false;
-      },
-    });
+  removeFavorite(event: Event, school: School) {
+    event.stopPropagation();
+    this.favoritesService.toggleFavorite(school);
+    this.loadData();
   }
 }

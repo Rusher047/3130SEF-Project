@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
-import { LanguageService } from '../../services/language.service';
+import { LanguageService, AppLanguage } from '../../services/language.service';
 
 @Component({
   selector: 'app-login',
@@ -10,34 +11,52 @@ import { LanguageService } from '../../services/language.service';
   standalone: false
 })
 export class LoginPage implements OnInit {
-  username: string = '';
-  password: string = '';
-  language: string = 'en';
+  username = '';
+  password = '';
+  language: AppLanguage = 'en';
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private languageService: LanguageService
+    private navCtrl: NavController,
+    private langService: LanguageService,
+    private router: Router
   ) { }
 
   ngOnInit() {
-    this.language = this.languageService.currentLanguage;
+    this.language = this.langService.currentLanguage;
   }
 
-  onLogin() {
-    if (this.username.trim().length > 0 && this.password.trim().length > 0) {
-      // 1. Log the user in
-      this.authService.login(this.username);
-      
-      // 2. Redirect to the Main Page
-      this.router.navigate(['/main']);
+  async onLogin() {
+    if (!this.username || !this.password) {
+      const msg = this.language === 'zh' ? '請輸入用戶名和密碼' : 'Please enter username and password';
+      alert(msg);
+      return;
+    }
+
+    const success = await this.authService.login(this.username, this.password);
+    
+    if (success) {
+      this.navCtrl.navigateRoot('/main');
     } else {
-      alert(this.language === 'zh' ? '請輸入用戶名和密碼' : 'Please enter username and password');
+      const errorMsg = this.language === 'zh' ? '用戶名或密碼錯誤' : 'Invalid username or password';
+      alert(errorMsg);
     }
   }
 
-  // Dual-language getters
-  getLoginTitle() { return this.language === 'zh' ? '登入' : 'Login'; }
-  getUserLabel() { return this.language === 'zh' ? '用戶名' : 'Username'; }
-  getPassLabel() { return this.language === 'zh' ? '密碼' : 'Password'; }
+  // --- HTML Getters Fixed ---
+  getLoginTitle(): string {
+    return this.language === 'zh' ? '登入' : 'Login';
+  }
+
+  getUserLabel(): string {
+    return this.language === 'zh' ? '用戶名' : 'Username';
+  }
+
+  getPassLabel(): string {
+    return this.language === 'zh' ? '密碼' : 'Password';
+  }
+
+  goToRegister() {
+    this.router.navigate(['/register']);
+  }
 }

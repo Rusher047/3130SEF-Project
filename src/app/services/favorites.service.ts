@@ -1,65 +1,54 @@
 import { Injectable } from '@angular/core';
+import { Preferences } from '@capacitor/preferences';
+import { School } from '../models/school.model';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class FavoritesService {
-  private readonly storageKey = 'favorite-school-ids';
+  private favoriteSchools: School[] = [];
 
-  getFavoriteIds(): string[] {
-    return this.readFavoriteIds();
+  constructor() {
+    this.loadFavorites();
+  }
+
+  // Load from phone memory on start
+  async loadFavorites() {
+    const { value } = await Preferences.get({ key: 'user_favorites' });
+    if (value) {
+      this.favoriteSchools = JSON.parse(value);
+    }
+  }
+
+  // Save to phone memory
+  async saveToStorage() {
+    await Preferences.set({
+      key: 'user_favorites',
+      value: JSON.stringify(this.favoriteSchools)
+    });
+  }
+
+  getFavorites(): School[] {
+    return this.favoriteSchools;
+  }
+
+  toggleFavorite(school: School): boolean {
+    const index = this.favoriteSchools.findIndex(s => s.id === school.id);
+    let added = false;
+
+    if (index > -1) {
+      this.favoriteSchools.splice(index, 1); // Remove
+      added = false;
+    } else {
+      this.favoriteSchools.push(school); // Add
+      added = true;
+    }
+
+    this.saveToStorage();
+    return added;
   }
 
   isFavorite(schoolId: string): boolean {
-    if (!schoolId) {
-      return false;
-    }
-
-    return this.readFavoriteIds().includes(schoolId);
-  }
-
-  toggleFavorite(schoolId: string): boolean {
-    if (!schoolId) {
-      return false;
-    }
-
-    const favoriteIds = this.readFavoriteIds();
-    const existingIndex = favoriteIds.indexOf(schoolId);
-
-    if (existingIndex >= 0) {
-      favoriteIds.splice(existingIndex, 1);
-      this.writeFavoriteIds(favoriteIds);
-      return false;
-    }
-
-    favoriteIds.push(schoolId);
-    this.writeFavoriteIds(favoriteIds);
-    return true;
-  }
-
-  private readFavoriteIds(): string[] {
-    try {
-      const raw = localStorage.getItem(this.storageKey);
-      if (!raw) {
-        return [];
-      }
-
-      const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) {
-        return [];
-      }
-
-      return parsed.filter((item) => typeof item === 'string' && item.trim().length > 0);
-    } catch {
-      return [];
-    }
-  }
-
-  private writeFavoriteIds(ids: string[]): void {
-    try {
-      localStorage.setItem(this.storageKey, JSON.stringify(ids));
-    } catch {
-      // Ignore storage write failures to keep UI stable.
-    }
+    return this.favoriteSchools.some(s => s.id === schoolId);
   }
 }
