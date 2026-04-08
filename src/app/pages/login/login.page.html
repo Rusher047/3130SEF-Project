@@ -1,27 +1,43 @@
-<ion-content class="ion-padding">
-  <div class="flex-center">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>{{ getLoginTitle() }}</ion-card-title>
-      </ion-card-header>
+<ion-content [fullscreen]="true" style="--background: linear-gradient(135deg, #71b7e6 0%, #9b59b6 100%);">
+  <div class="centering-wrapper">
+    
+    <!-- BRAND TITLE ABOVE FORM -->
+    <div class="brand-header">
+      <h1>School Finder HK</h1>
+      <p>{{ language === 'zh' ? '為您的孩子尋找理想學校' : 'Finding the best education path' }}</p>
+    </div>
 
-      <ion-card-content>
-        <ion-item>
-          <ion-label position="stacked">{{ getUserLabel() }}</ion-label>
-          <ion-input type="text" [(ngModel)]="username" placeholder="e.g. Rusher047"></ion-input>
+    <div class="modern-card">
+      <div class="ion-text-center">
+        <h1 class="auth-title">{{ getLoginTitle() }}</h1>
+        <div class="underline"></div>
+      </div>
+
+      <div class="form-container">
+        <ion-item lines="none" class="modern-input">
+          <ion-icon name="person-outline" slot="start"></ion-icon>
+          <ion-input type="text" [(ngModel)]="username" [placeholder]="getUserLabel()"></ion-input>
         </ion-item>
 
-        <ion-item>
-          <ion-label position="stacked">{{ getPassLabel() }}</ion-label>
-          <ion-input type="password" [(ngModel)]="password">
+        <ion-item lines="none" class="modern-input">
+          <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+          <ion-input type="password" [(ngModel)]="password" [placeholder]="getPassLabel()">
             <ion-input-password-toggle slot="end"></ion-input-password-toggle>
           </ion-input>
         </ion-item>
 
-        <ion-button expand="block" class="ion-margin-top" (click)="onLogin()">
+        <ion-button expand="block" shape="round" class="gradient-button" (click)="onLogin()">
           {{ getLoginTitle() }}
         </ion-button>
-      </ion-card-content>
-    </ion-card>
+
+        <div class="auth-footer ion-text-center ion-margin-top">
+          <p style="color: #444;">
+            {{ language === 'zh' ? '還沒有帳戶？' : "Don't have an account?" }} 
+            <span class="link-text" (click)="goToRegister()">{{ language === 'zh' ? '立即註冊' : 'Register Now' }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </ion-content>

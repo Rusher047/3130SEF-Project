@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { AppLanguage, LanguageService } from '../../services/language.service';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-main',
@@ -32,9 +33,15 @@ export class MainPage implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private readonly languageService: LanguageService
+    private readonly languageService: LanguageService,
+    private menuCtrl: MenuController
   ) { }
 
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(true); // Enable side menu on main page
+  }
+  
   ngOnInit() {
 
     this.language = this.languageService.currentLanguage;

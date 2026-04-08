@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController, NavController, MenuController } from '@ionic/angular';
 import { Subject, takeUntil } from 'rxjs';
 import { AppLanguage, LanguageService } from './services/language.service';
 import { AuthService } from './services/auth.service';
+import { FavoritesService } from './services/favorites.service';
 
 @Component({
   selector: 'app-root',
@@ -31,16 +32,21 @@ export class AppComponent implements OnInit, OnDestroy {
     private alertController: AlertController, 
     private navCtrl: NavController,
     private readonly languageService: LanguageService ,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private menuCtrl: MenuController,
+    private readonly favoritesService: FavoritesService
   ) {}
 
   async ngOnInit() {
-  await this.authService.checkSavedLogin();
-  
-  if (this.authService.getUser()) {
-    // If user is found in memory, go to Main instead of Login
+   const user = await this.authService.checkSavedLogin();
+  if (user) {
+    this.menuCtrl.enable(true); // ENABLE it if user is logged in
     this.navCtrl.navigateRoot('/main');
+  } else {
+    this.menuCtrl.enable(false); // DISABLE it if not logged in
+    this.navCtrl.navigateRoot('/login');
   }
+  
     this.language = this.languageService.currentLanguage;
     this.languageService.language$
       .pipe(takeUntil(this.destroy$))
@@ -87,6 +93,8 @@ export class AppComponent implements OnInit, OnDestroy {
           cssClass: 'alert-danger',
           handler: () => {
             this.authService.logout();
+            this.favoritesService.clearFavorites(); // Clear favorites on logout for security
+            this.menuCtrl.enable(false); // Close the menu if it's open
             this.navCtrl.navigateRoot('/login');
           }
         }

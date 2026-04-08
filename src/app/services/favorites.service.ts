@@ -51,4 +51,12 @@ export class FavoritesService {
   isFavorite(schoolId: string): boolean {
     return this.favoriteSchools.some(s => s.id === schoolId);
   }
+
+  // Add this inside the class
+clearFavorites() {
+  this.favoriteSchools = [];
+  // We don't necessarily need to clear the storage here if you want 
+  // favorites to be shared on the same device, but for security:
+  // Preferences.remove({ key: 'user_favorites' }); 
+}
 }

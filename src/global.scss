@@ -43,3 +43,82 @@
     align-items: center;
     height: 100%;
 }
+
+/* --- Shared Modern Auth UI (Updated for Web & Mobile) --- */
+
+.centering-wrapper {
+  display: flex;
+  flex-direction: column; // Stack Brand Title above Card
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  width: 100%;
+  padding: 20px; // Padding for small screens
+}
+
+// The BIG Title above the card
+.brand-header {
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+  
+  h1 {
+    font-size: 3rem; // Large for Web
+    font-weight: 900;
+    letter-spacing: -1px;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin: 0;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-top: 5px;
+    font-weight: 300;
+  }
+}
+
+// Responsive Glass Card
+.modern-card {
+  width: 100%;
+  // INCREASED WIDTH: 480px looks better on Web than 400px
+  max-width: 480px; 
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(15px);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  padding: 40px 30px; // More breathing room for Web
+  margin-bottom: 50px;
+}
+
+// Media Query for even larger Desktop screens
+@media (min-width: 992px) {
+  .brand-header h1 {
+    font-size: 3.5rem;
+  }
+  .modern-card {
+    max-width: 520px; // Slightly larger for 4K/Big monitors
+    padding: 50px 40px;
+  }
+}
+
+/* Keep the rest of your .modern-input, .link-text, .gradient-button as they were */
+.modern-input {
+  --background: #f4f4f4;
+  --border-radius: 12px;
+  --padding-start: 15px;
+  --color: #1a1a1a;
+  margin-bottom: 16px;
+  ion-icon { color: #555; margin-right: 8px; }
+}
+
+.gradient-button {
+  --background: linear-gradient(135deg, #71b7e6, #9b59b6);
+  font-weight: 700;
+  height: 55px; // Taller button for better Web feel
+  margin-top: 20px;
+}
+
+.auth-title { font-weight: 800; font-size: 2rem; color: #333; margin-bottom: 5px; }
+.underline { height: 4px; width: 50px; background: linear-gradient(135deg, #71b7e6, #9b59b6); margin: 0 auto 20px auto; border-radius: 5px; }
+.link-text { color: #9b59b6; font-weight: 800; cursor: pointer; }

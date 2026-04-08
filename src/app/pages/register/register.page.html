@@ -1,13 +1,48 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" style="--background: linear-gradient(135deg, #71b7e6 0%, #9b59b6 100%);">
+  <div class="centering-wrapper">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <!-- BRAND TITLE ABOVE FORM -->
+    <div class="brand-header">
+      <h1>School Finder HK</h1>
+      <p>{{ language === 'zh' ? '快速建立您的個人帳戶' : 'Join our community of parents' }}</p>
+    </div>
+
+    <div class="modern-card">
+      <div class="ion-text-center">
+        <h1 class="auth-title">{{ getRegisterTitle() }}</h1>
+        <div class="underline"></div>
+      </div>
+
+      <div class="form-container">
+        <ion-item lines="none" class="modern-input">
+          <ion-icon name="person-outline" slot="start"></ion-icon>
+          <ion-input type="text" [(ngModel)]="username" [placeholder]="getUserLabel()"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="modern-input">
+          <ion-icon name="mail-outline" slot="start"></ion-icon>
+          <ion-input type="email" [(ngModel)]="email" [placeholder]="getEmailLabel()"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="modern-input">
+          <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+          <ion-input type="password" [(ngModel)]="password" [placeholder]="getPassLabel()">
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </ion-item>
+
+        <ion-button expand="block" shape="round" class="gradient-button" (click)="onRegister()">
+          {{ language === 'zh' ? '註冊' : 'Register' }}
+        </ion-button>
+
+        <div class="auth-footer ion-text-center ion-margin-top">
+          <p style="color: #444;">
+            {{ language === 'zh' ? '已有帳戶？' : "Already have an account?" }} 
+            <span class="link-text" routerLink="/login">{{ getBackToLogin() }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </ion-content>

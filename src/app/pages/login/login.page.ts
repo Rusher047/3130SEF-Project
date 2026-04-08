@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, MenuController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { LanguageService, AppLanguage } from '../../services/language.service';
 
@@ -19,9 +19,14 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
     private navCtrl: NavController,
     private langService: LanguageService,
-    private router: Router
+    private router: Router,
+    private menuCtrl: MenuController
   ) { }
 
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false); // Disable side menu on login page
+  }
+  
   ngOnInit() {
     this.language = this.langService.currentLanguage;
   }
@@ -58,5 +63,5 @@ export class LoginPage implements OnInit {
 
   goToRegister() {
     this.router.navigate(['/register']);
-  }
+}
 }
