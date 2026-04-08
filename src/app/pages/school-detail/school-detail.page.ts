@@ -16,7 +16,7 @@ import { SchoolService } from '../../services/school.service';
 export class SchoolDetailPage implements OnInit, OnDestroy {
   school: School | null = null;
   websiteUrl: string | null = null;
-  isFavorite = false;
+  isFavorite: boolean = false;
   isLoading = true;
   errorMessage = '';
   language: AppLanguage = 'en';

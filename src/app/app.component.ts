@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
 import { Subject, takeUntil } from 'rxjs';
 import { AppLanguage, LanguageService } from './services/language.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -29,11 +30,17 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private alertController: AlertController, 
     private navCtrl: NavController,
-    private readonly languageService: LanguageService 
+    private readonly languageService: LanguageService ,
+    private readonly authService: AuthService
   ) {}
 
-  ngOnInit() {
-
+  async ngOnInit() {
+  await this.authService.checkSavedLogin();
+  
+  if (this.authService.getUser()) {
+    // If user is found in memory, go to Main instead of Login
+    this.navCtrl.navigateRoot('/main');
+  }
     this.language = this.languageService.currentLanguage;
     this.languageService.language$
       .pipe(takeUntil(this.destroy$))
@@ -79,6 +86,7 @@ export class AppComponent implements OnInit, OnDestroy {
           text: confirmText,
           cssClass: 'alert-danger',
           handler: () => {
+            this.authService.logout();
             this.navCtrl.navigateRoot('/login');
           }
         }

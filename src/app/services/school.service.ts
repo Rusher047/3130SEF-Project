@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, timeout } from 'rxjs';
-
+import { Preferences } from '@capacitor/preferences';
 import { School } from '../models/school.model';
 
 
@@ -9,11 +9,44 @@ import { School } from '../models/school.model';
   providedIn: 'root',
 })
 export class SchoolService {
+  private favorites: School[] = [];
   private readonly datasetUrl = 'https://www.edb.gov.hk/attachment/en/student-parents/sch-info/sch-search/sch-location-info/SCH_LOC_EDB.json';
   
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {
+    this.loadFavorites();
+  }
 
+
+  async saveFavorites() {
+    await Preferences.set({
+      key: 'my_favorites',
+      value: JSON.stringify(this.favorites)
+    });
+  }
+
+  async loadFavorites() {
+    const { value } = await Preferences.get({ key: 'my_favorites' });
+    if (value) {
+        this.favorites = JSON.parse(value);
+      }
+    }
+
+     getFavorites() {
+    return this.favorites;
+  }
+
+  addToFavorites(school: School) {
+    if (!this.favorites.find(s => s.id === school.id)) {
+      this.favorites.push(school);
+      this.saveFavorites(); // 3. Save to memory after adding
+    }
+  }
+
+  removeFromFavorites(school: School) {
+    this.favorites = this.favorites.filter(s => s.id !== school.id);
+    this.saveFavorites(); // 4. Save to memory after removing
+  }
 
   getSchools(): Observable<School[]> {
     return this.http.get<unknown>(this.datasetUrl).pipe(
