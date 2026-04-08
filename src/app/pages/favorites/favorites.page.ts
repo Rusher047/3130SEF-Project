@@ -11,7 +11,7 @@ import { LanguageService, AppLanguage } from '../../services/language.service';
   standalone: false
 })
 export class FavoritesPage implements OnInit {
-  // These variables match your HTML exactly
+
   favoriteSchools: School[] = [];
   isLoading = false;
   errorMessage = '';
@@ -48,7 +48,6 @@ export class FavoritesPage implements OnInit {
     this.loadData();
   }
 
-  // --- HTML GETTERS (Fixes all Property Not Found Errors) ---
 
   getTitle(): string {
     return this.language === 'zh' ? '我的最愛' : 'My Favorites';
@@ -86,7 +85,6 @@ export class FavoritesPage implements OnInit {
     return this.language === 'zh' ? school.chineseName : school.englishName;
   }
 
-  // --- ACTIONS ---
 
   openSchoolDetail(school: School) {
     this.router.navigate(['/school-detail', school.id]);

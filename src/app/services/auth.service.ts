@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
+import { FavoritesService } from './favorites.service';
 
 export interface UserProfile {
   username: string;
@@ -13,30 +14,27 @@ export interface UserProfile {
 export class AuthService {
   private currentUser: UserProfile | null = null;
 
-  constructor() {}
+  constructor(private favService: FavoritesService) {
+  }
 
-  /**
-   * 1. Check if a user is already logged in (Auto-login)
-   * This matches the call in your AppComponent.ngOnInit
-   */
+  
   async checkSavedLogin() {
     const { value } = await Preferences.get({ key: 'user_session' });
     if (value) {
       this.currentUser = JSON.parse(value);
+      await this.favService.loadUserFavorites(this.currentUser!.username);
     }
     return this.currentUser;
   }
 
-  /**
-   * 2. Register a new account into the "Local Database"
-   */
+  
   async register(userData: UserProfile) {
     const { value } = await Preferences.get({ key: 'all_users' });
     let users = value ? JSON.parse(value) : [];
     
-    // Check if username already exists
-    if (users.find((u: any) => u.username === userData.username)) {
-      throw new Error('User already exists');
+    const exists = users.find((u: any) => u.username === userData.username);
+    if (exists) {
+      throw new Error('Username already exists. Please choose another.');
     }
 
     users.push(userData);
@@ -46,9 +44,7 @@ export class AuthService {
     });
   }
 
-  /**
-   * 3. Verify credentials against the "Local Database"
-   */
+  
   async login(username: string, password: string): Promise<boolean> {
     const { value } = await Preferences.get({ key: 'all_users' });
     const users = value ? JSON.parse(value) : [];
@@ -57,27 +53,26 @@ export class AuthService {
     
     if (user) {
       this.currentUser = user;
-      // Save the session so checkSavedLogin() finds it next time
       await Preferences.set({
         key: 'user_session',
         value: JSON.stringify(user)
       });
+      
+      await this.favService.loadUserFavorites(username);
+      
       return true;
     }
     return false;
   }
 
-  /**
-   * 4. Clear the session on logout
-   */
+  
   async logout() {
     this.currentUser = null;
     await Preferences.remove({ key: 'user_session' });
+    this.favService.clearLocalData();
   }
 
-  /**
-   * 5. Get current user data
-   */
+  
   getUser() {
     return this.currentUser;
   }

@@ -48,7 +48,6 @@ export class LoginPage implements OnInit {
     }
   }
 
-  // --- HTML Getters Fixed ---
   getLoginTitle(): string {
     return this.language === 'zh' ? '登入' : 'Login';
   }

@@ -7,56 +7,69 @@ import { School } from '../models/school.model';
 })
 export class FavoritesService {
   private favoriteSchools: School[] = [];
+  private currentUsername: string = '';
 
   constructor() {
-    this.loadFavorites();
+    
   }
 
-  // Load from phone memory on start
-  async loadFavorites() {
-    const { value } = await Preferences.get({ key: 'user_favorites' });
+  
+  async loadUserFavorites(username: string) {
+    this.currentUsername = username;
+    const { value } = await Preferences.get({ key: `favorites_${username}` });
+    
     if (value) {
       this.favoriteSchools = JSON.parse(value);
+    } else {
+      this.favoriteSchools = [];
     }
+    console.log(`Favorites Service: Loaded ${this.favoriteSchools.length} schools for user: ${username}`);
   }
 
-  // Save to phone memory
+  
   async saveToStorage() {
+    if (!this.currentUsername) {
+      console.error('Favorites Service: Cannot save, no user logged in.');
+      return;
+    }
+    
     await Preferences.set({
-      key: 'user_favorites',
+      key: `favorites_${this.currentUsername}`,
       value: JSON.stringify(this.favoriteSchools)
     });
   }
 
+  
   getFavorites(): School[] {
     return this.favoriteSchools;
   }
 
+  
   toggleFavorite(school: School): boolean {
     const index = this.favoriteSchools.findIndex(s => s.id === school.id);
-    let added = false;
+    let isNowFav = false;
 
     if (index > -1) {
-      this.favoriteSchools.splice(index, 1); // Remove
-      added = false;
+      this.favoriteSchools.splice(index, 1);
+      isNowFav = false;
     } else {
-      this.favoriteSchools.push(school); // Add
-      added = true;
+      this.favoriteSchools.push(school);
+      isNowFav = true;
     }
 
     this.saveToStorage();
-    return added;
+    return isNowFav;
   }
 
+  
   isFavorite(schoolId: string): boolean {
     return this.favoriteSchools.some(s => s.id === schoolId);
   }
 
-  // Add this inside the class
-clearFavorites() {
-  this.favoriteSchools = [];
-  // We don't necessarily need to clear the storage here if you want 
-  // favorites to be shared on the same device, but for security:
-  // Preferences.remove({ key: 'user_favorites' }); 
-}
+  
+  clearLocalData() {
+    this.favoriteSchools = [];
+    this.currentUsername = '';
+    console.log('Favorites Service: Local memory cleared for logout.');
+  }
 }

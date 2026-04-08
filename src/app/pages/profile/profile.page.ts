@@ -17,7 +17,7 @@ export class ProfilePage implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private favService: FavoritesService,
+    private favoritesService: FavoritesService, 
     private langService: LanguageService
   ) { }
 
@@ -32,19 +32,18 @@ export class ProfilePage implements OnInit {
   refreshData() {
     this.language = this.langService.currentLanguage;
     this.user = this.authService.getUser();
-    this.favorites = this.favService.getFavorites();
+    this.favorites = this.favoritesService.getFavorites();
   }
 
-  // --- HTML Getters Fixed ---
+  getDisplayName(s: School): string {
+    return this.language === 'zh' ? s.chineseName : s.englishName;
+  }
+
   getFavTitle(): string {
     return this.language === 'zh' ? '我的最愛學校' : 'My Favorite Schools';
   }
 
   getNoFavText(): string {
     return this.language === 'zh' ? '尚未添加最愛學校' : 'No favorites added yet.';
-  }
-
-  getDisplayName(s: School): string {
-    return this.language === 'zh' ? s.chineseName : s.englishName;
   }
 }

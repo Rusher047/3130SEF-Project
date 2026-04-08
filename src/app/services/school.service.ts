@@ -39,13 +39,13 @@ export class SchoolService {
   addToFavorites(school: School) {
     if (!this.favorites.find(s => s.id === school.id)) {
       this.favorites.push(school);
-      this.saveFavorites(); // 3. Save to memory after adding
+      this.saveFavorites(); 
     }
   }
 
   removeFromFavorites(school: School) {
     this.favorites = this.favorites.filter(s => s.id !== school.id);
-    this.saveFavorites(); // 4. Save to memory after removing
+    this.saveFavorites(); 
   }
 
   getSchools(): Observable<School[]> {
